@@ -1,2 +1,21 @@
-# Amazon-app-School project
-Application that allows you create an account and upload images and after that transform them into animated files
+# amazon-app
+
+> application that allows you to login via amazon cognito and convert an image to animation
+
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
