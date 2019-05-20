@@ -32,4 +32,19 @@ export default {
     margin-top: 5%;
     width: 100%;
   }
+  .main-view{
+    width: 80%;
+    margin: auto;
+  }
+  .flex{
+    display: flex;
+    justify-content: space-between;
+  }
+  .col-2{
+    width: 45%;
+  }
+
+  .col-2 ul{
+    text-align: left;
+  }
 </style>

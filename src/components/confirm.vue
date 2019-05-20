@@ -26,6 +26,7 @@
 		},
 		props: ["cognito"],
 		methods:{
+
 			confirmUser(){
 				this.cognitoUser.confirmRegistration(this.confirmationCode, true, (err, result)=> {
 				    if (err) {
@@ -36,10 +37,12 @@
 				    console.log('call result: ' + result);
 				});
 			},
+
 			setCognito(){
 				this.cognitoUser = this.cognito;
 			}
 		},
+		
 		created(){
 			this.setCognito();
 		}
