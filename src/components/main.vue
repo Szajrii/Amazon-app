@@ -49,16 +49,16 @@
 		methods:{
 
 			listItems(){
+			    console.log('elo');
 				this.items = [];
 				this.pagesView = true;
-				const reg = new RegExp(/mariusz\S{2}/);
 
 				this.s3.listObjects({Prefix: `${this.getUserName}/`}, (err, results) =>{
 		        if(err){
 		            return alert (err)
 		        }
 		        results.Contents.forEach( item => {
-		        	if (item.Key.match(reg)) this.items.push(item.Key)
+		        	this.items.push(item.Key)
 		        	
 		        })
 		        
