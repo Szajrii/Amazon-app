@@ -5,13 +5,14 @@
 				<p>Zalogowany jako: {{getUserName}}</p>
 
 				<input class="form-input" id="input-example-16" type="file" @change="getFile($event)">
-				<button @click="uploadFile">Prześlij plik do bucketu</button>
-				<button @click="listItems">pokabierz liste</button>
+				<button @click="uploadFile" class="btn btn-primary input-group-btn">Prześlij plik do bucketu</button>
+				<button @click="listItems" class="btn btn-primary input-group-btn">pobierz liste</button>
+				<button @click="serverRequest" class="btn btn-primary input-group-btn">server</button>
 
 			</div>
 			<div class="col-2">
 				<ul>
-					<li v-for="item in items">{{item}}</li>
+					<li v-for="(item, index) in items" :id="index" @click="imageToAnimate($event)">{{item}}</li>
 				</ul>
 				
 			</div>
@@ -24,21 +25,22 @@
 	import router from '../router';
 	import {IdentityPoolId, bucketRegion, bucketName, poolData, region} from '../utils/env.js'
 	import AWS from 'aws-sdk'
+	import axios from "axios";
+
+	// var ffmpeg = require('fluent-ffmpeg');
+
+
 
 	export default {
 		name: 'main',
-		props: ['cognito','s3'],
+		props: ['cognito','s3', 'token'],
 		data(){
 			return{
 				// s3: {},
 				items: [],
 				keyID: 0,
 				file: '',
-				pagesView: false,
-				pages:{
-					current: 1,
-					all: 1
-				}
+				images: []
 			}
 		},
 		computed: {
@@ -89,6 +91,18 @@
 			getFile(file){
 				this.file = file.target.files[0];
 			},
+			serverRequest(){
+				axios.post('https://fkcs76z2le.execute-api.eu-central-1.amazonaws.com/dev/animation',{
+					"token": this.token,
+					"name": this.getUserName,
+					"images": this.images
+				}).then(({data}) => {
+					console.log(data)
+				});
+			},
+			imageToAnimate(event){
+				this.images.push(this.items[event.currentTarget.id])
+			}
 	
 		},
 		watch:{
@@ -103,3 +117,9 @@
 	};
 
 </script>
+
+<style scoped>
+	li{
+		cursor: pointer;
+	}
+</style>
