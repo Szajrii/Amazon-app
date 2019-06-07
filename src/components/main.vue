@@ -18,24 +18,61 @@
 				</div>
 			</div>
 		</div>
+		<div class="wrapper-menu">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-md-8 mx-auto">
+						<div class="wrapper-tabs">
+							<div class="tab" @click="tabActive=1" :class="{ active: tabActive===1 }">
+								<span>Twoje zdjęcia</span>
+							</div>
+							<div class="tab" @click="tabActive=2" :class="{ active: tabActive===2 }">
+								<span>Twoje filmy</span>
+							</div>
+							<div class="tab" @click="tabActive=3" :class="{ active: tabActive===3 }">
+								<span>Dodaj zdjęcie</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="container">
 			<div class="row">
 				<div class="col-12 col-md-6 mx-auto">
 					<div class="wrapper-content">
-						<div class="video last">
+						<div class="video last" v-show="tabActive===2">
 							<label class="form-label" for="video">Twój ostatni film</label>
 							<input type="text" id="video" value="www.pornhub.com/rafatus">
 						</div>
-						<div class="video upload">
+						<div class="video upload" v-show="tabActive===3">
 							<label class="form-label" for="video">Dodaj zdjęcie</label>
 							<div class="custom-file">
 								<input type="file" class="custom-file-input" id="customFileLang" lang="es" @change="getFile($event)">
 								<label class="custom-file-label" for="customFileLang">{{file.name}}</label>
 							</div>
+							<button @click="uploadFile" class="btn-sec">Prześlij zdjęcie</button>
 						</div>
-						<div class="video files">
-							<label class="form-label" for="video">Twoje zdjęcia</label>
-							<img src="../images/reload.png" alt="" height="20px" @click="listItems">
+						<div class="photo-container"  v-show="tabActive===1">
+							<div class="video files">
+								<label class="form-label" for="video">Twoje zdjęcia</label>
+								<img src="../images/reload.png" alt="" height="20px" @click="listItems">
+							</div>
+							<div class="list-video">
+								<div class="item" v-for="(item, index) in items">
+									<div class="wrapper-img">
+										<img :src="imagesSrc[index]"/>
+										<p>{{item}}</p>
+									</div>
+									<div class="wrapper-add">
+										<img src="../images/add.png" alt="" height="20px"  style="cursor: pointer" :id="index" @click="imageToAnimate($event)">
+									</div>
+								</div>
+							</div>
+							<div class="video files">
+								<label class="form-label mt-5" for="video">Wybrane zdjęcia</label>
+							</div>
+							<button @click="serverRequest" class="btn btn-primary input-group-btn">server</button>
 						</div>
 					</div>
 				</div>
@@ -46,19 +83,10 @@
 			<div class="col-2">
 
 				<!--<input class="form-input" id="input-example-16" type="file" @change="getFile($event)">-->
-				<button @click="uploadFile" class="btn btn-primary input-group-btn">Prześlij plik do bucketu</button>
+				<!--<button @click="uploadFile" class="btn btn-primary input-group-btn">Prześlij plik do bucketu</button>-->
 				<!--<button @click="listItems" class="btn btn-primary input-group-btn">pobierz liste</button>-->
-				<button @click="serverRequest" class="btn btn-primary input-group-btn">server</button>
 
 			</div>
-			<div class="col-2">
-				<ul>
-<!--					tu edytowałem-->
-					<li v-for="(item, index) in items" :id="index" @click="imageToAnimate($event)">{{item}}<img :src="imagesSrc[index]" width="100px" height="100px"/></li>
-				</ul>
-				
-			</div>
-<!--			to dodałem-->
 			<div>
 				<img :src="getImageId(index)" alt="" v-for="(img, index) in images" @click="removeImage($event)" :key="index">
 			</div>
@@ -83,6 +111,7 @@
 			return{
 				// s3: {},
 				items: [],
+				tabActive: 1,
 				keyID: 0,
 				file: '',
 				images: [],
