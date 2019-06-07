@@ -53,9 +53,14 @@
 			</div>
 			<div class="col-2">
 				<ul>
-					<li v-for="(item, index) in items" :id="index" @click="imageToAnimate($event)">{{item}}</li>
+<!--					tu edytowałem-->
+					<li v-for="(item, index) in items" :id="index" @click="imageToAnimate($event)">{{item}}<img :src="imagesSrc[index]" width="100px" height="100px"/></li>
 				</ul>
 				
+			</div>
+<!--			to dodałem-->
+			<div>
+				<img :src="getImageId(index)" alt="" v-for="(img, index) in images" @click="removeImage($event)" :key="index">
 			</div>
 		</div>
 	</div>
@@ -68,7 +73,6 @@
 	import AWS from 'aws-sdk'
 	import axios from "axios";
 
-	// var ffmpeg = require('fluent-ffmpeg');
 
 
 
@@ -81,20 +85,22 @@
 				items: [],
 				keyID: 0,
 				file: '',
-				images: []
+				images: [],
+				imagesSrc: []
 			}
 		},
 		computed: {
 			getUserName(){
 				return this.cognito.getUsername();
-			}
+			},
+
 		},
 		methods:{
 
 			listItems(){
 			    console.log('elo');
 				this.items = [];
-				this.pagesView = true;
+				this.imagesSrc = [];
 
 				this.s3.listObjects({Prefix: `${this.getUserName}/`}, (err, results) =>{
 		        if(err){
@@ -102,10 +108,20 @@
 		        }
 		        results.Contents.forEach( item => {
 		        	this.items.push(item.Key)
+
+					var params = {
+
+						Bucket: 'uek-188345',
+						Key: item.Key
+					};
+
+					var url = this.s3.getSignedUrl('getObject', params);
+					this.imagesSrc.push(url)
 		        	
 		        })
 		        
-			})
+			});
+
 			},
 
 			uploadFile(){
@@ -115,13 +131,6 @@
 				  Bucket: bucketName, 
 				  Key: `${this.getUserName}/${this.file.name}`
 			 };
-			   // this.s3.putObject(params, function(err, data) {
-				  //  if (err) console.log(err, err.stack); // an error occurred
-				  //  else     console.log(data);           // successful response
-				     
-			   //  });
-			  
-			 //  var params = {Bucket: bucketName, Key: `uek-188345/mariusz2/mariusz2.txt`, Body: 'filedfsdfdfs'};
 
 			  this.s3.upload(params, function(err, data) {
 				  console.log(err, data);
@@ -132,6 +141,7 @@
 			getFile(file){
 				this.file = file.target.files[0];
 			},
+
 			serverRequest(){
 				axios.post('https://fkcs76z2le.execute-api.eu-central-1.amazonaws.com/dev/animation',{
 					"token": this.token,
@@ -141,8 +151,19 @@
 					console.log(data)
 				});
 			},
+
 			imageToAnimate(event){
 				this.images.push(this.items[event.currentTarget.id])
+
+			},
+
+			getImageId(arrayId){
+				var id = this.items.indexOf(this.images[arrayId])
+				return this.imagesSrc[id]
+			},
+
+			removeImage(event){
+				this.images.splice(event.currentTarget.key, 1)
 			}
 	
 		},
