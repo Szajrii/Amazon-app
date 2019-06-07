@@ -1,12 +1,53 @@
 <template>
 	<div class="main-view">
+		<div class="line-separator-purple"></div>
+		<div class="wrapper-user-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="wrapper-info">
+							<div class="logo">
+								<img src="../images/logo.png" alt="" height="30px">
+							</div>
+							<div class="user">
+								<img src="../images/user.png" alt="" height="30px">
+								<span>{{getUserName}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-6 mx-auto">
+					<div class="wrapper-content">
+						<div class="video last">
+							<label class="form-label" for="video">Twój ostatni film</label>
+							<input type="text" id="video" value="www.pornhub.com/rafatus">
+						</div>
+						<div class="video upload">
+							<label class="form-label" for="video">Dodaj zdjęcie</label>
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" id="customFileLang" lang="es" @change="getFile($event)">
+								<label class="custom-file-label" for="customFileLang">{{file.name}}</label>
+							</div>
+						</div>
+						<div class="video files">
+							<label class="form-label" for="video">Twoje zdjęcia</label>
+							<img src="../images/reload.png" alt="" height="20px" @click="listItems">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="flex">
 			<div class="col-2">
-				<p>Zalogowany jako: {{getUserName}}</p>
 
-				<input class="form-input" id="input-example-16" type="file" @change="getFile($event)">
+				<!--<input class="form-input" id="input-example-16" type="file" @change="getFile($event)">-->
 				<button @click="uploadFile" class="btn btn-primary input-group-btn">Prześlij plik do bucketu</button>
-				<button @click="listItems" class="btn btn-primary input-group-btn">pobierz liste</button>
+				<!--<button @click="listItems" class="btn btn-primary input-group-btn">pobierz liste</button>-->
 				<button @click="serverRequest" class="btn btn-primary input-group-btn">server</button>
 
 			</div>
