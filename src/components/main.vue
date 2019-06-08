@@ -46,7 +46,7 @@
 							<div class="wrapper-your-video">
 								<div class="row">
 									<div class="col-12">
-										<video width="480" height="480" controls src="https://uek-188345.s3.eu-central-1.amazonaws.com/tomasz/video/twojevideo.mp4"></video>
+										<video width="480" height="480" controls :src="video"></video>
 									</div>
 								</div>
 							</div>
@@ -79,7 +79,7 @@
 								<label class="form-label mt-5" for="video">Wybrane zdjęcia ({{images.length}})</label>
 							</div>
 							<div class="row">
-								<div class="col-6 col-md-4 my-3" v-for="(img, index) in images" :key="index" @click="removeImage($event)">
+								<div class="col-6 col-md-4 my-3" v-for="(img, index) in images" :id="index" @click="removeImage($event)">
 									<div class="wrapper-selected-item">
 										<div class="remove-wrapper">
 											<img src="../images/remove.png" alt="" height="20px">
@@ -125,7 +125,8 @@
 				keyID: 0,
 				file: '',
 				images: [],
-				imagesSrc: []
+				imagesSrc: [],
+				video: ''
 			}
 		},
 		computed: {
@@ -137,6 +138,11 @@
 		methods:{
 
 			listItems(){
+				var pattern = /[jpg]$/g;
+				var pattern2 = /[png]$/g;
+				var pattern3 = /[jpeg]$/g;
+				var pattern4 = /[jpeg2000]$/g;
+				var pattern5 = /[gif]$/g;
 			    console.log('elo');
 				this.items = [];
 				this.imagesSrc = [];
@@ -146,29 +152,34 @@
 		            return alert (err)
 		        }
 		        results.Contents.forEach( item => {
-		        	this.items.push(item.Key)
+		        	if(item.Key.match(pattern) || item.Key.match(pattern2) || item.Key.match(pattern3) || item.Key.match(pattern4) || item.Key.match(pattern5)){
 
-					var params = {
+						this.items.push(item.Key)
 
-						Bucket: 'uek-188345',
-						Key: item.Key
-					};
+						var params = {
 
-					var url = this.s3.getSignedUrl('getObject', params);
-					this.imagesSrc.push(url)
+							Bucket: 'uek-188345',
+							Key: item.Key
+						};
+
+						var url = this.s3.getSignedUrl('getObject', params);
+						this.imagesSrc.push(url)
+					}
+
 		        	
 		        })
 		        
 			});
-
+			this.getLastVideo();
 			},
 
 			uploadFile(){
 			//dodac jesli wybierzesz pusty plik to nie przepusci
 			 var params = {
 				  Body: this.file, 
-				  Bucket: bucketName, 
-				  Key: `${this.getUserName}/${this.file.name}`
+				  Bucket: bucketName,
+				  Key: `${this.getUserName}/${this.file.name}`,
+				  ACL: 'public-read-write',
 			 };
 
 			  this.s3.upload(params, function(err, data) {
@@ -188,6 +199,7 @@
 					"images": this.images
 				}).then(({data}) => {
 					console.log(data)
+					this.getLastVideo();
 				});
 			},
 
@@ -202,7 +214,18 @@
 			},
 
 			removeImage(event){
-				this.images.splice(event.currentTarget.key, 1)
+				console.log(event.currentTarget.key)
+				this.images.splice(event.currentTarget.id, 1)
+			},
+			getLastVideo(){
+				var pattern = /twojevideo.mp4/i;
+				var params = {
+					Bucket: 'uek-188345',
+					Key: `${this.getUserName}/video/twojevideo.mp4`
+				};
+
+				var url = this.s3.getSignedUrl('getObject', params);
+				this.video = url;
 			}
 	
 		},
@@ -212,7 +235,7 @@
 			}
 		},
 		created(){
-			
+			this.listItems();
 
 		}
 	};
