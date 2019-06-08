@@ -273,3 +273,34 @@ button.btn-sec {
     }
   }
 }
+
+.wrapper-selected-item{
+  position: relative;
+  cursor: pointer;
+
+  .remove-wrapper{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+      width: 40px;
+      height: auto;
+    }
+  }
+  &:hover .remove-wrapper{
+    opacity: 1;
+  }
+}
+
+.make-film-action{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}

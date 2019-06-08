@@ -21,7 +21,7 @@
 		<div class="wrapper-menu">
 			<div class="container">
 				<div class="row">
-					<div class="col-12 col-md-8 mx-auto">
+					<div class="col-12 col-md-10 mx-auto">
 						<div class="wrapper-tabs">
 							<div class="tab" @click="tabActive=1" :class="{ active: tabActive===1 }">
 								<span>Twoje zdjęcia</span>
@@ -39,23 +39,29 @@
 		</div>
 		<div class="container">
 			<div class="row">
-				<div class="col-12 col-md-6 mx-auto">
+				<div class="col-12 col-md-10 mx-auto">
 					<div class="wrapper-content">
 						<div class="video last" v-show="tabActive===2">
-							<label class="form-label" for="video">Twój ostatni film</label>
-							<input type="text" id="video" value="www.pornhub.com/rafatus">
+							<label class="form-label">Twóje ostatnie filmy</label>
+							<div class="wrapper-your-video">
+								<div class="row">
+									<div class="col-12">
+										<video width="480" height="480" controls src="https://uek-188345.s3.eu-central-1.amazonaws.com/tomasz/video/twojevideo.mp4"></video>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="video upload" v-show="tabActive===3">
-							<label class="form-label" for="video">Dodaj zdjęcie</label>
+							<label class="form-label">Dodaj zdjęcie</label>
 							<div class="custom-file">
 								<input type="file" class="custom-file-input" id="customFileLang" lang="es" @change="getFile($event)">
 								<label class="custom-file-label" for="customFileLang">{{file.name}}</label>
 							</div>
-							<button @click="uploadFile" class="btn-sec">Prześlij zdjęcie</button>
+							<button @click="uploadFile" class="btn-sec" style="">Prześlij zdjęcie</button>
 						</div>
 						<div class="photo-container"  v-show="tabActive===1">
 							<div class="video files">
-								<label class="form-label" for="video">Twoje zdjęcia</label>
+								<label class="form-label">Twoje zdjęcia</label>
 								<img src="../images/reload.png" alt="" height="20px" @click="listItems">
 							</div>
 							<div class="list-video">
@@ -69,26 +75,30 @@
 									</div>
 								</div>
 							</div>
-							<div class="video files">
-								<label class="form-label mt-5" for="video">Wybrane zdjęcia</label>
+							<div class="video files" v-show="images.length>0">
+								<label class="form-label mt-5" for="video">Wybrane zdjęcia ({{images.length}})</label>
 							</div>
-							<button @click="serverRequest" class="btn btn-primary input-group-btn">server</button>
+							<div class="row">
+								<div class="col-6 col-md-4 my-3" v-for="(img, index) in images" :key="index" @click="removeImage($event)">
+									<div class="wrapper-selected-item">
+										<div class="remove-wrapper">
+											<img src="../images/remove.png" alt="" height="20px">
+										</div>
+										<img :src="getImageId(index)" alt=""   style="width: 100%">
+									</div>
+								</div>
+							</div>
+							<div class="row" v-show="images.length>0">
+								<div class="col-12 my-4" style="text-align: center">
+									<div class="make-film-action">
+										<input type="text" placeholder="nazwa filmu" style="width: 50%">
+										<button @click="serverRequest" class="btn-sec" style="margin: 0;">Stwórz film</button>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<div class="flex">
-			<div class="col-2">
-
-				<!--<input class="form-input" id="input-example-16" type="file" @change="getFile($event)">-->
-				<!--<button @click="uploadFile" class="btn btn-primary input-group-btn">Prześlij plik do bucketu</button>-->
-				<!--<button @click="listItems" class="btn btn-primary input-group-btn">pobierz liste</button>-->
-
-			</div>
-			<div>
-				<img :src="getImageId(index)" alt="" v-for="(img, index) in images" @click="removeImage($event)" :key="index">
 			</div>
 		</div>
 	</div>
