@@ -1,9 +1,26 @@
 <template>	
 
-		<div class="my-form">
-			<label class="form-label" for="input-example-1">Type your confirmation code</label>
-			<input class="form-input" type="text" id="input-example-1" placeholder="Name" v-model="confirmationCode">
-			<button class="btn btn-primary input-group-btn" @click="confirmUser">Submit</button>
+			<div class="wrapper-bg">
+				<div id="register">
+					<div class="wrapper-logo">
+						<img src="../images/logo.png" alt="">
+						<p>WIPWC</p>
+					</div>
+					<div class="form-group">
+						<h3>Potwierdź rejestracje</h3>
+						<div class="input-wrapper">
+							<label class="form-label" for="input-example-1">Twój kod weryfikacyjny</label>
+							<input class="form-input" type="text" id="input-example-1" placeholder="Twój kod" v-model="confirmationCode">
+						</div>
+						<div class="wrapper-button">
+							<button class="btn btn-gajda" @click="confirmUser">Potwierdź kod</button>
+						</div>
+						<div class="wrapper-szarek">
+							<router-link to="/login"><span>Masz już konto? Zaloguj się!</span></router-link>
+						</div>
+					</div>
+				</div>
+			</div>
 
 		</div>
 

@@ -6,9 +6,11 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="wrapper-info">
-							<div class="logo">
-								<img src="../images/logo.png" alt="" height="30px">
-							</div>
+							<router-link to="/">
+								<div class="logo">
+									<img src="../images/logo.png" alt="" height="30px">
+								</div>
+							</router-link>
 							<div class="user">
 								<img src="../images/user.png" alt="" height="30px">
 								<span>{{getUserName}}</span>
@@ -27,7 +29,7 @@
 								<span>Twoje zdjęcia</span>
 							</div>
 							<div class="tab" @click="tabActive=2" :class="{ active: tabActive===2 }">
-								<span>Twoje filmy</span>
+								<span>Twój film</span>
 							</div>
 							<div class="tab" @click="tabActive=3" :class="{ active: tabActive===3 }">
 								<span>Dodaj zdjęcie</span>
@@ -42,11 +44,10 @@
 				<div class="col-12 col-md-10 mx-auto">
 					<div class="wrapper-content">
 						<div class="video last" v-show="tabActive===2">
-							<label class="form-label">Twóje ostatnie filmy</label>
 							<div class="wrapper-your-video">
 								<div class="row">
 									<div class="col-12">
-										<video width="480" height="480" controls :src="video"></video>
+										<video width="100%" height="600" controls :src="video"></video>
 									</div>
 								</div>
 							</div>
@@ -199,7 +200,10 @@
 					"images": this.images
 				}).then(({data}) => {
 					console.log(data)
-					this.getLastVideo();
+					this.tabActive=2;
+					this.images=[];
+                    this.getLastVideo();
+
 				});
 			},
 
