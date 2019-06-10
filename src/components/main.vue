@@ -92,7 +92,7 @@
 							<div class="row" v-show="images.length>0">
 								<div class="col-12 my-4" style="text-align: center">
 									<div class="make-film-action">
-										<input type="text" placeholder="nazwa filmu" style="width: 50%">
+<!--										<input type="text" placeholder="nazwa filmu" style="width: 50%">-->
 										<button @click="serverRequest" class="btn-sec" style="margin: 0;">Stwórz film</button>
 									</div>
 								</div>
@@ -200,11 +200,12 @@
 					"images": this.images
 				}).then(({data}) => {
 					console.log(data)
-					this.tabActive=2;
 					this.images=[];
                     this.getLastVideo();
 
+
 				});
+				this.tabActive=2;
 			},
 
 			imageToAnimate(event){
