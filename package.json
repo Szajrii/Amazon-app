@@ -13,7 +13,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.0.17",
     "amazon-cognito-identity-js": "^3.0.12",
     "aws-sdk": "^2.459.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "ffmpeg.js": "^3.1.9001",
     "file-system": "^2.2.2",
     "fluent-ffmpeg": "^2.1.2",
